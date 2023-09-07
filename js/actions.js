@@ -29,9 +29,11 @@ submit.addEventListener("click", e => {
     cell2.innerHTML = email;
     cell3.innerHTML = admin ? "X" : "-";
 
-    var imgElement = document.createElement('img'); // Create an img element
+    var imgElement = document.createElement('img');
     console.log(`objecturl: ${objectUrl}`)
     imgElement.src = objectUrl;
+    imgElement.width = 64;
+    imgElement.height = 64;
 
     cell4.appendChild(imgElement);
 });
@@ -45,7 +47,7 @@ empty.addEventListener("click", e => {
 // source for most of snippet below: https://stackoverflow.com/a/8904008
 
 var _URL = window.URL || window.webkitURL;
-var inputImage = document.getElementById('input-image'); // Replace 'input-image' with the actual ID of your file input element
+var inputImage = document.getElementById('input-image');
 
 inputImage.addEventListener('change', function (e) {
     var file = this.files[0];
@@ -53,10 +55,9 @@ inputImage.addEventListener('change', function (e) {
         var img = new Image();
         objectUrl = _URL.createObjectURL(file);
         img.onload = function () {
-            if (this.width !== 64 || this.height !== 64) { // Use || (OR) instead of && (AND)
+            if (this.width !== 64 || this.height !== 64) {
                 alert("Dimensions are not 64x64!");
                 _URL.revokeObjectURL(objectUrl);
-                // Optionally, clear the file input
                 inputImage.value = null;
             }
         };
