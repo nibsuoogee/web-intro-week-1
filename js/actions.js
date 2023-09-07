@@ -1,19 +1,60 @@
-const titleDiv = document.getElementById("titleDiv");
-const greetWorldButton = document.getElementById("my-button");
-const addTextButton = document.getElementById("add-data");
+const submit = document.getElementById("submit-data");
+var objectUrl;
 
-greetWorldButton.addEventListener("click", e => {
-    console.log("hello world")
-    titleDiv.innerHTML = '<h1>Moi maailma</p>';
-})
+submit.addEventListener("click", e => {
+    e.preventDefault()
+    username = document.getElementById("input-username").value;
+    email = document.getElementById("input-email").value;
+    admin = document.getElementById("input-admin").checked;
+    
+    const usersTable = document.getElementById("users");
 
-addTextButton.addEventListener("click", e => {
-    const textList = document.getElementById("text-list");
+    var x;
+    for (x = 0; x < document.getElementById("usersbody").rows.length; x++) {     
+        if (document.getElementById("usersbody").rows[x].cells[0].innerHTML === username) {
+            document.getElementById("usersbody").rows[x].cells[1].innerHTML = email;
+            document.getElementById("usersbody").rows[x].cells[2].innerHTML = admin ? "X" : "-";
+            return
+        };
+    }
 
-    let newNote = document.createElement("li");
+    let row = usersTable.insertRow(-1);
+    
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
 
-    newNote.innerHTML = document.getElementById("note-field").value;
+    cell1.innerHTML = username;
+    cell2.innerHTML = email;
+    cell3.innerHTML = admin ? "X" : "-";
 
-    textList.appendChild(newNote)
-})
+    var imgElement = document.createElement('img'); // Create an img element
+    imgElement.src = objectUrl;
 
+    cell4.appendChild(imgElement);
+});
+
+const empty = document.getElementById("empty-table");
+
+empty.addEventListener("click", e => {
+    document.getElementById('usersbody').innerHTML = '';
+});
+
+// source for most of snippet below: https://stackoverflow.com/a/8904008
+
+var _URL = window.URL || window.webkitURL;
+$("#input-image").change(function (e) {
+    var file, img;
+    if ((file = this.files[0])) {
+        img = new Image();
+        objectUrl = _URL.createObjectURL(file);
+        img.onload = function () {
+            if ((this.width !== 64 ) && (this.height !== 64 )) {
+                alert("dimensions not 64x64!")
+                _URL.revokeObjectURL(objectUrl);
+            }
+        };
+        img.src = objectUrl;
+    }
+});
