@@ -30,6 +30,7 @@ submit.addEventListener("click", e => {
     cell3.innerHTML = admin ? "X" : "-";
 
     var imgElement = document.createElement('img'); // Create an img element
+    console.log(`objecturl: ${objectUrl}`)
     imgElement.src = objectUrl;
 
     cell4.appendChild(imgElement);
@@ -44,17 +45,20 @@ empty.addEventListener("click", e => {
 // source for most of snippet below: https://stackoverflow.com/a/8904008
 
 var _URL = window.URL || window.webkitURL;
-$("#input-image").change(function (e) {
-    var file, img;
-    if ((file = this.files[0])) {
-        img = new Image();
+var inputImage = document.getElementById('input-image'); // Replace 'input-image' with the actual ID of your file input element
+
+inputImage.addEventListener('change', function (e) {
+    var file = this.files[0];
+    if (file) {
+        var img = new Image();
         objectUrl = _URL.createObjectURL(file);
         img.onload = function () {
-            if ((this.width !== 64 ) && (this.height !== 64 )) {
-                alert("dimensions not 64x64!")
+            if (this.width !== 64 || this.height !== 64) { // Use || (OR) instead of && (AND)
+                alert("Dimensions are not 64x64!");
                 _URL.revokeObjectURL(objectUrl);
+                // Optionally, clear the file input
+                inputImage.value = null;
             }
         };
-        img.src = objectUrl;
     }
 });
